@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Add student | Campus/Ledger</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body>
+<div th:replace="~{fragments/nav :: topbar('admin')}"></div>
+<main class="page-shell page-shell-narrow">
+    <a class="back-link" th:href="@{/admin}">← Student directory</a>
+    <div class="page-heading page-heading-compact"><div><p class="eyebrow">STUDENT RECORD <span>/ NEW</span></p><h1>Add a student</h1><p class="muted">The student can register with this enrollment ID and email.</p></div></div>
+    <section class="form-section">
+        <form th:action="@{/admin/students}" th:object="${studentForm}" method="post" class="form-grid">
+            <div class="form-field"><label for="fullName">Full name</label><input id="fullName" th:field="*{fullName}" autocomplete="name" required><small class="field-error" th:errors="*{fullName}"></small></div>
+            <div class="form-field"><label for="enrollmentId">Enrollment ID</label><input id="enrollmentId" th:field="*{enrollmentId}" required><small class="field-error" th:errors="*{enrollmentId}"></small></div>
+            <div class="form-field"><label for="email">Institution email</label><input id="email" th:field="*{email}" type="email" autocomplete="email" required><small class="field-error" th:errors="*{email}"></small></div>
+            <div class="form-field"><label for="program">Program</label><input id="program" th:field="*{program}" placeholder="e.g. BSc Computer Science" required><small class="field-error" th:errors="*{program}"></small></div>
+            <div class="form-actions"><a class="button button-quiet" th:href="@{/admin}">Cancel</a><button class="button button-primary" type="submit">Save student <span>→</span></button></div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

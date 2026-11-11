@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Student results | Campus/Ledger</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body>
+<div th:replace="~{fragments/nav :: topbar('admin')}"></div>
+<main class="page-shell">
+    <a class="back-link" th:href="@{/admin}">← Student directory</a>
+    <div class="profile-heading"><div class="profile-monogram" th:text="${#strings.substring(student.fullName, 0, 1)}">S</div><div class="profile-copy"><p class="eyebrow">STUDENT PROFILE <span>/ RESULTS</span></p><h1 th:text="${student.fullName}">Student Name</h1><p class="muted"><span th:text="${student.enrollmentId}"></span><span class="dot-separator">·</span><span th:text="${student.program}"></span></p></div><div class="profile-contact" th:text="${student.email}"></div></div>
+    <div class="metrics-row"><div class="metric"><span class="stat-label">CUMULATIVE GPA</span><strong th:text="${#numbers.formatDecimal(cgpa, 1, 2)}">0.00</strong><span>out of 10.00</span></div><div class="metric"><span class="stat-label">SEMESTERS</span><strong th:text="${semesters.size()}">0</strong><span>with results</span></div><div class="metric"><span class="stat-label">COURSES</span><strong th:text="${marks.size()}">0</strong><span>marks recorded</span></div></div>
+    <div class="admin-detail-grid">
+        <section class="form-section mark-entry-section">
+            <div class="section-heading"><div><p class="eyebrow">RESULTS DESK</p><h2>Enter course marks</h2></div><span class="section-index">01</span></div>
+            <div class="notice notice-success" th:if="${markSaved}">Course result saved.</div>
+            <form th:action="@{/admin/students/{id}/marks(id=${student.id})}" th:object="${markForm}" method="post" class="form-stack">
+                <div class="form-field"><label for="semester">Semester</label><input id="semester" th:field="*{semester}" type="number" min="1" max="12" required><small class="field-error" th:errors="*{semester}"></small></div>
+                <div class="form-field"><label for="courseCode">Course code</label><input id="courseCode" th:field="*{courseCode}" placeholder="CS101" required><small class="field-error" th:errors="*{courseCode}"></small></div>
+                <div class="form-field"><label for="courseName">Course name</label><input id="courseName" th:field="*{courseName}" required><small class="field-error" th:errors="*{courseName}"></small></div>
+                <div class="form-two"><div class="form-field"><label for="credits">Credits</label><input id="credits" th:field="*{credits}" type="number" min="1" max="10" required><small class="field-error" th:errors="*{credits}"></small></div><div class="form-field"><label for="marksValue">Marks / 100</label><input id="marksValue" th:field="*{marks}" type="number" min="0" max="100" step="0.01" required><small class="field-error" th:errors="*{marks}"></small></div></div>
+                <p class="form-hint">Saving the same course code in a semester updates its result.</p>
+                <button class="button button-primary button-wide" type="submit">Save course result <span>→</span></button>
+            </form>
+        </section>
+        <section class="results-section">
+            <div class="section-heading"><div><p class="eyebrow">ACADEMIC HISTORY</p><h2>Semester results</h2></div></div>
+            <div class="semester-list"><article class="semester-row" th:each="semester : ${semesters}"><div class="semester-id"><span>SEMESTER</span><strong th:text="${#numbers.formatInteger(semester.semester(), 2)}">01</strong></div><div class="semester-detail"><strong th:text="${semester.courseCount()} + ' courses'"></strong><span th:text="${semester.credits()} + ' credits'">0 credits</span></div><div class="semester-gpa"><span>SGPA</span><strong th:text="${#numbers.formatDecimal(semester.sgpa(), 1, 2)}">0.00</strong></div></article>
+                <p class="empty-state empty-inline" th:if="${semesters.isEmpty()}"><strong>No results yet</strong><span>Enter the first course mark to begin.</span></p></div>
+            <div class="table-wrap result-table-wrap"><table><thead><tr><th>COURSE</th><th>SEM</th><th>CR</th><th>MARKS</th><th>GRADE</th></tr></thead><tbody>
+                <tr th:each="mark : ${marks}"><td><strong class="course-code" th:text="${mark.courseCode}"></strong><span class="course-name" th:text="${mark.courseName}"></span></td><td th:text="${#numbers.formatInteger(mark.semester, 2)}"></td><td th:text="${mark.credits}"></td><td th:text="${#numbers.formatDecimal(mark.marks, 1, 2)}"></td><td><span class="grade-badge" th:text="${mark.letterGrade}"></span></td></tr>
+                <tr th:if="${marks.isEmpty()}"><td colspan="5" class="empty-row">No course marks have been entered.</td></tr></tbody></table></div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

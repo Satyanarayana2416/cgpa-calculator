@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in | Campus/Ledger</title><link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="auth-page">
+<main class="auth-layout">
+    <section class="auth-story">
+        <a class="wordmark wordmark-inverse" th:href="@{/}"><span class="wordmark-mark">C</span><span>Campus<span class="wordmark-light">/</span>Ledger</span></a>
+        <div class="story-copy"><p class="eyebrow">ACADEMIC RECORDS, MADE CLEAR</p><h1>Your work,<br>in perspective.</h1><p>A considered view of every semester, every credit, every step forward.</p></div>
+        <div class="story-bottom"><span>01 — 10</span><span>GRADE POINT SCALE</span></div>
+        <div class="story-orbit"><span>CGPA</span><strong>8.72</strong><small>cumulative</small><i>↗</i></div>
+    </section>
+    <section class="auth-form-wrap">
+        <div class="auth-form">
+            <p class="eyebrow">WELCOME BACK</p><h2>Sign in to your account</h2><p class="muted">Use your enrollment ID or admin username.</p>
+            <div class="notice notice-success" th:if="${registered}">Account created. You can sign in now.</div>
+            <div class="notice notice-error" th:if="${param.error}">The username or password was not recognized.</div>
+            <div class="notice notice-success" th:if="${param.logout}">You have signed out.</div>
+            <form th:action="@{/login}" method="post" class="form-stack">
+                <label for="username">Enrollment ID / username</label><input id="username" name="username" autocomplete="username" required autofocus>
+                <div class="label-row"><label for="password">Password</label></div><input id="password" name="password" type="password" autocomplete="current-password" required>
+                <button class="button button-primary button-wide" type="submit">Sign in <span>→</span></button>
+            </form>
+            <p class="auth-switch">New to the portal? <a th:href="@{/register}">Create a student account <span>↗</span></a></p>
+            <p class="auth-foot">Student access is enabled by your institution.</p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

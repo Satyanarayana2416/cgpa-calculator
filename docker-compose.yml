@@ -1,0 +1,21 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: cgpa_db
+      MYSQL_USER: cgpa_user
+      MYSQL_PASSWORD: local_cgpa_password
+      MYSQL_ROOT_PASSWORD: local_root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - cgpa_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-plocal_root_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  cgpa_mysql_data:

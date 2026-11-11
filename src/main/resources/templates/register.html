@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create account | Campus/Ledger</title><link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="auth-page">
+<main class="auth-layout">
+    <section class="auth-story">
+        <a class="wordmark wordmark-inverse" th:href="@{/}"><span class="wordmark-mark">C</span><span>Campus<span class="wordmark-light">/</span>Ledger</span></a>
+        <div class="story-copy"><p class="eyebrow">YOUR ACADEMIC RECORD</p><h1>Every term,<br>in one place.</h1><p>Sign in securely to follow your grades and cumulative progress.</p></div>
+        <div class="story-bottom"><span>STUDENT PORTAL</span><span>PRIVATE BY DESIGN</span></div>
+        <div class="story-orbit"><span>TERM</span><strong>01</strong><small>one step at a time</small><i>↗</i></div>
+    </section>
+    <section class="auth-form-wrap">
+        <div class="auth-form">
+            <p class="eyebrow">GET STARTED</p><h2>Create your account</h2><p class="muted">Your institution must add your student record first.</p>
+            <div class="notice notice-error" th:if="${#fields.hasGlobalErrors()}" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+            <form th:action="@{/register}" th:object="${registrationForm}" method="post" class="form-stack">
+                <label for="enrollmentId">Enrollment ID</label><input id="enrollmentId" th:field="*{enrollmentId}" autocomplete="username" required><small class="field-error" th:errors="*{enrollmentId}"></small>
+                <label for="email">Institution email</label><input id="email" th:field="*{email}" type="email" autocomplete="email" required><small class="field-error" th:errors="*{email}"></small>
+                <label for="password">Password</label><input id="password" th:field="*{password}" type="password" autocomplete="new-password" minlength="8" required><small class="field-error" th:errors="*{password}"></small>
+                <label for="confirmPassword">Confirm password</label><input id="confirmPassword" th:field="*{confirmPassword}" type="password" autocomplete="new-password" required><small class="field-error" th:errors="*{confirmPassword}"></small>
+                <button class="button button-primary button-wide" type="submit">Create account <span>→</span></button>
+            </form>
+            <p class="auth-switch">Already registered? <a th:href="@{/login}">Sign in <span>↗</span></a></p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

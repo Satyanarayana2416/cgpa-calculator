@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header class="topbar" th:fragment="topbar(active)">
+    <a class="wordmark" th:href="@{/dashboard}"><span class="wordmark-mark">C</span><span>Campus<span class="wordmark-light">/</span>Ledger</span></a>
+    <nav class="topbar-nav">
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}" th:classappend="${active == 'admin'} ? ' is-active'">Students</a>
+        <a sec:authorize="hasRole('STUDENT')" th:href="@{/student/dashboard}" th:classappend="${active == 'student'} ? ' is-active'">My transcript</a>
+    </nav>
+    <div class="topbar-account"><span sec:authentication="name"></span><form th:action="@{/logout}" method="post"><button class="icon-button" type="submit" aria-label="Sign out" title="Sign out">↗</button></form></div>
+</header>
+</body>
+</html>

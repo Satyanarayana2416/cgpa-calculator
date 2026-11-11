@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Students | Campus/Ledger</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body>
+<div th:replace="~{fragments/nav :: topbar('admin')}"></div>
+<main class="page-shell">
+    <div class="page-heading"><div><p class="eyebrow">ACADEMIC OFFICE <span>/ OVERVIEW</span></p><h1>Student records</h1><p class="muted">Manage enrollment records and semester results.</p></div><a class="button button-primary" th:href="@{/admin/students/new}"><span>＋</span> Add student</a></div>
+    <div class="stat-strip">
+        <div class="stat-cell"><span class="stat-label">REGISTERED STUDENTS</span><strong th:text="${studentCount}">0</strong><span class="stat-note">in the institution</span></div>
+        <div class="stat-cell"><span class="stat-label">COURSE RESULTS</span><strong th:text="${courseCount}">0</strong><span class="stat-note">marks recorded</span></div>
+        <div class="stat-cell stat-cell-accent"><span class="stat-label">ADMIN WORKSPACE</span><strong>01</strong><span class="stat-note">records desk</span></div>
+    </div>
+    <section class="content-section">
+        <div class="section-heading"><div><p class="eyebrow">DIRECTORY</p><h2>Find a student</h2></div><span class="result-count" th:text="${students.size()} + ' shown'"></span></div>
+        <form class="search-form" th:action="@{/admin}" method="get"><label class="sr-only" for="student-search">Search enrollment ID or name</label><span class="search-icon">⌕</span><input id="student-search" name="q" th:value="${query}" placeholder="Search enrollment ID or name"><button type="submit" class="button button-dark">Search</button><a class="clear-link" th:if="${!query.isBlank()}" th:href="@{/admin}">Clear</a></form>
+        <div class="table-wrap">
+            <table><thead><tr><th>STUDENT</th><th>ENROLLMENT ID</th><th>PROGRAM</th><th>EMAIL</th><th></th></tr></thead>
+                <tbody><tr th:each="student : ${students}"><td><a class="student-name" th:href="@{/admin/students/{id}(id=${student.id})}" th:text="${student.fullName}"></a></td><td class="mono" th:text="${student.enrollmentId}"></td><td th:text="${student.program}"></td><td class="muted" th:text="${student.email}"></td><td><a class="row-action" th:href="@{/admin/students/{id}(id=${student.id})}" aria-label="Open student">↗</a></td></tr>
+                <tr th:if="${students.isEmpty()}"><td colspan="5" class="empty-state"><strong>No student records found</strong><span th:text="${query.isBlank()} ? 'Add a student to begin entering marks.' : 'Try another enrollment ID or name.'"></span></td></tr></tbody>
+            </table>
+        </div>
+        <p class="section-foot">Showing up to 8 records. Use search to find a specific student.</p>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My transcript | Campus/Ledger</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body>
+<div th:replace="~{fragments/nav :: topbar('student')}"></div>
+<main class="page-shell">
+    <div class="page-heading student-heading"><div><p class="eyebrow">STUDENT PORTAL <span>/ TRANSCRIPT</span></p><h1 th:text="${student.fullName}">Student Name</h1><p class="muted"><span th:text="${student.enrollmentId}"></span><span class="dot-separator">·</span><span th:text="${student.program}"></span></p></div><div class="transcript-stamp"><span>ACADEMIC RECORD</span><strong>OFFICIAL VIEW</strong></div></div>
+    <div class="student-summary">
+        <section class="cgpa-panel"><div><p class="eyebrow">CUMULATIVE GRADE POINT AVERAGE</p><strong class="cgpa-value" th:text="${#numbers.formatDecimal(cgpa, 1, 2)}">0.00</strong><span class="cgpa-scale">/ 10.00</span></div><div class="cgpa-mark"><span>CGPA</span><span>01</span></div><p class="cgpa-caption">Calculated from credit-weighted grade points across all recorded semesters.</p></section>
+        <div class="student-stat-list"><div><span>SEMESTERS COMPLETED</span><strong th:text="${semesters.size()}">0</strong></div><div><span>COURSES COMPLETED</span><strong th:text="${courseCount}">0</strong></div><div><span>TOTAL CREDITS</span><strong th:text="${totalCredits}">0</strong></div></div>
+    </div>
+    <section class="content-section transcript-section">
+        <div class="section-heading"><div><p class="eyebrow">PROGRESS</p><h2>Semester overview</h2></div><span class="result-count" th:text="${semesters.size()} + ' semesters'"></span></div>
+        <div class="semester-list student-semesters"><article class="semester-row" th:each="semester : ${semesters}"><div class="semester-id"><span>SEMESTER</span><strong th:text="${#numbers.formatInteger(semester.semester(), 2)}">01</strong></div><div class="semester-detail"><strong th:text="${semester.courseCount()} + ' courses'"></strong><span th:text="${semester.credits()} + ' credits'">0 credits</span></div><div class="student-gpa-track"><span>SEMESTER GPA</span><div class="gpa-bar"><i th:style="'width:' + ${semester.sgpa().multiply(T(java.math.BigDecimal).TEN)} + '%' "></i></div></div><div class="semester-gpa"><strong th:text="${#numbers.formatDecimal(semester.sgpa(), 1, 2)}">0.00</strong><span>/ 10</span></div></article>
+            <p class="empty-state empty-inline" th:if="${semesters.isEmpty()}"><strong>Your transcript is taking shape</strong><span>Results will appear here after your institution records course marks.</span></p></div>
+    </section>
+    <section class="content-section course-history">
+        <div class="section-heading"><div><p class="eyebrow">DETAIL</p><h2>Course history</h2></div><span class="result-count" th:text="${courseCount} + ' courses'"></span></div>
+        <div class="table-wrap"><table><thead><tr><th>COURSE</th><th>SEMESTER</th><th>CREDITS</th><th>MARKS</th><th>GRADE</th><th>POINTS</th></tr></thead><tbody>
+            <tr th:each="mark : ${marks}"><td><strong class="course-code" th:text="${mark.courseCode}"></strong><span class="course-name" th:text="${mark.courseName}"></span></td><td th:text="${#numbers.formatInteger(mark.semester, 2)}"></td><td th:text="${mark.credits}"></td><td th:text="${#numbers.formatDecimal(mark.marks, 1, 2)}"></td><td><span class="grade-badge" th:text="${mark.letterGrade}"></span></td><td th:text="${mark.gradePoint}"></td></tr>
+            <tr th:if="${marks.isEmpty()}"><td colspan="6" class="empty-row">No course results have been recorded yet.</td></tr></tbody></table></div>
+        <p class="section-foot">Grade points are weighted by course credits. The grading scale is maintained by your institution.</p>
+    </section>
+</main>
+</body>
+</html>
